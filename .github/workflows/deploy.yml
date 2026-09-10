@@ -22,8 +22,17 @@ jobs:
           script_stop: true
 
           script: |
+            # 1. 프로젝트 폴더로 이동합니다
             cd /home/ubuntu/devops-service
+            
+            # 2. 깃허브에서 최신 소스코드를 받아옵니다
             git pull origin main
+            
+            # 3. 프로젝트를 클린 빌드합니다 (gradlew 권한 문제가 있다면 chmod +x gradlew 추가 가능)
             ./gradlew clean build
+            
+            # 4. 기존에 8080 포트를 쓰고 있는 프로세스가 있다면 강제 종료합니다
             sudo fuser -k -n tcp 8080 || true
+            
+            # 5. 빌드된 jar 파일을 백그라운드로 실행하고 로그를 남깁니다
             nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
