@@ -8,6 +8,6 @@ public class AppController {
 
     @GetMapping("/")
     public String index() {
-        return "Hello World";
+        return "Change World";
     }
 }
